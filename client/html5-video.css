@@ -10,8 +10,8 @@
 }
 
 .controls {
-  padding: 10px 5px;
-  height: 20px;
+  padding: 0px 5px;
+  height: 100%;
 }
 
 .controls .control {
@@ -21,7 +21,7 @@
   font-size: 16px;
   cursor: pointer;
   opacity: 0.7;
-  margin: 4px;
+  padding: 13px 8px;
 }
 
 .controls .control:hover {
@@ -32,6 +32,7 @@
   position: relative;
   background: #000;
   cursor: none;
+  font-family: sans-serif, Arial;
 }
 
 .video-wrap.active {
@@ -57,14 +58,15 @@
 
 .progress {
   height: 4px;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.4);
   cursor: pointer;
   position: absolute;
   top: 0px;
 }
 
 .control.time {
-  font-size: 13px;
+  font-size: 12px;
+  padding-top: 15px;
 }
 
 .control {
@@ -79,10 +81,14 @@
 
 .popover-settings ul > li {
   padding: 2px;
-  font-size: 13px;
+  font-size: 12px;
   margin: 2px;
   text-align: center;
-  opacity: 0.7;
+  opacity: 0.4;
+}
+
+.popover-settings ul > li.selected {
+  opacity: 0.9;
 }
 
 .popover-settings ul > li:hover {
@@ -104,6 +110,7 @@
   -webkit-transition-duration: 300ms;
 }
 
+.settings:hover .popover-settings,
 .open .popover-settings {
   opacity: 1;
 }
@@ -112,17 +119,16 @@
   opacity: 1!important;
 }
 
-
 .thumb {
   cursor: pointer;
   height: 5px;
   width: 5px;
-  background: rgba(91, 91, 92, 1);
+  background: rgba(87, 87, 87, 1);
   position: absolute;
   top: -6px;
   border-radius: 18px;
-  border: 5px solid rgba(18, 18, 19, 1);
-  -webkit-box-shadow: 0 0 5px 0 rgba(79, 79, 82, 1);
+  border: 5px solid rgba(255, 255, 255, 0.8);
+  -webkit-box-shadow: 0 0 10px 0 rgba(12, 12, 12, 0.8);
   z-index: 2;
 }
 

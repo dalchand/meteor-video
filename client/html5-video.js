@@ -1,74 +1,61 @@
-var selectedQuality = -1;
-var qualityDep = new Deps.Dependency;
-
+var _currentSrc = "";
+var selectedQualityDeps = new Deps.Dependency;
 var video = {
   width: 600,
   height: 400,
   qualities: [ 
     {
       name: "1080p", 
-      sources: [
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_1080.webm", type: "video/webm"},
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_1080.mp4", type: "video/mp4"}
-      ]
+      src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_1080.webm"
     },
     {
       name: "720p", 
-      sources: [
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_720.webm", type: "video/webm"},
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_720.mp4", type: "video/mp4"}
-      ]
+      src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_720.webm"
     },
     {
       name: "480p", 
-      sources: [
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_480.webm", type: "video/webm"},
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_480.mp4", type: "video/mp4"}
-      ]
+      src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_480.webm"
     },
     {
       name: "240p", 
-      sources: [
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_240.webm", type: "video/webm"},
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_240.mp4", type: "video/mp4"}
-      ]
+      src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_240.webm"
     }
   ],
   defaultQuality: 0
 };
 
+Template.html5Video.created = function() {
+  var video = this.data;
+  if(video.qualities) {
+    var index = 0;
+    if(video.defaultQuality) {
+      index = video.defaultQuality;
+    }
+    _currentSrc = video.qualities[index].src;
+    selectedQualityDeps.changed();
+  }
+}
+
 UI.body.video = function() {
   return video;
 }  
 
-Template.html5Video.sources = function() {
-  if(this.qualities) {
-    if(selectedQuality === -1) selectedQuality = this.defaultQuality;
-    if(this.qualities[selectedQuality]) {
-      return this.qualities[this.defaultQuality].sources;
-    }
-  }
+Template.html5Video.source = function() {
+  selectedQualityDeps.depend();
+  return _currentSrc;  
 }
+
+Template.html5Video.selected = function() {
+  selectedQualityDeps.depend();
+  return (_currentSrc === this.src);
+}
+
 
 Session.setDefault("seeking", false);
-Session.setDefault("logs", "");
-
-Template.html5Video.logs = function() {
-  return Session.get("logs");
-}
-
-function timeRangesToString(r, total) {
-  var log = "";
-  for (var i=0; i<r.length; i++) {
-    log += "[ " + Math.round(r.start(i) * 100/total) + "%, " + Math.round(r.end(i) * 100/total) + "% ]<br>";
-  }
-  return log;
-}
 
 Template.html5Video.position = function() {
   return Session.get("position");
 }
-
 
 Template.html5Video.progresses = function() {
   return Session.get("progresses");
@@ -126,13 +113,13 @@ Template.html5Video.rendered = function() {
   $(v).on("mousestop", function(){
     Meteor.setTimeout(function(){
       Session.set("userActive", false);
-    }, 5000);
+    }, 6000);
   })
 
   $(v).on("mouseout", function(){
     Meteor.setTimeout(function(){
       Session.set("userActive", false);
-    }, 1000);
+    }, 3000);
   });
 }
 
@@ -160,7 +147,19 @@ var seekVideo = function(video, position) {
   }
 }
 
+var _currentTime = 0;
+var _play = false;
+
 Template.html5Video.events({
+  "click .settings li": function(event, template) {
+    _currentSrc = this.src;
+    var video = template.find("video");
+    _currentTime = video.currentTime;
+    _play = !video.paused;
+    selectedQualityDeps.changed();
+    video.pause();
+    video.load();
+  },
   "mousedown .thumb": function(event, template) {
     event.stopPropagation();
     var v = template.find("video");
@@ -183,15 +182,14 @@ Template.html5Video.events({
     }
   },
   "canplay video": function(event) {
-  //  console.log("canplay");
+  
   },
   "loadeddata video": function(event) {
-    console.log("loadeddata");
+  
   },
   "click .fa-play": function(event, template) {
     var v = template.find("video");
     if(v) {
-      console.log("click .fa-play")
       v.play();
     }
   },
@@ -213,14 +211,22 @@ Template.html5Video.events({
       $(el).removeClass("fa-pause").addClass("fa-play");
     }
   },
-  "click .settingsBtn": function(event, template) {
+  "mouseenter .settingsBtn": function(event, template) {
     var el = template.find(".settings");
     if(el) {
-      if($(el).hasClass("open")) {
-        $(el).removeClass("open");
-      } else {
-        $(el).addClass("open");
-      }
+      $(el).addClass("open");
+    }
+  },
+  "mouseout .popover-settings": function(event, template) {
+    var el = template.find(".settings");
+    if(el) {
+      $(el).removeClass("open");
+    }
+  },
+  "mouseout .controls": function(event, template) {
+    var el = template.find(".settings");
+    if(el) {
+      $(el).removeClass("open");
     }
   },
   "click .fullScreen": function(event, template) {
@@ -236,10 +242,16 @@ Template.html5Video.events({
     }
   },
   "loadedmetadata video": function(event) {
-    console.log("loadedmetadata");
+    var v = event.target;
+    if(_currentTime > 0) {
+      v.currentTime = _currentTime;
+    }
+    if(_play) {
+      v.play();
+    }
   },
   "loadstart": function(event) {
-    console.log("loadstart");
+  
   },
   "progress video": function(event, template) {
     var v = event.target;
@@ -256,7 +268,6 @@ Template.html5Video.events({
   },
   "timeupdate video": function(event, template) {
     var v = event.target;
-    //console.log(Session.get("seeking") + " " + v.currentTime);
     if(!Session.get("seeking")) {
       var position = (v.currentTime / v.duration) * ($(v).width() - $(template.find(".thumb")).outerWidth());
       Session.set("currentTime", v.currentTime);
@@ -265,12 +276,12 @@ Template.html5Video.events({
     } 
   },
   "volumechanged video": function(event) {
-    console.log("volumechanged");
+  
   }
 })
 
 
-function toggleFullScreen() {
+var toggleFullScreen = function() {
   if (!document.fullscreenElement &&    // alternative standard method
       !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
     if (document.documentElement.requestFullscreen) {

@@ -11,12 +11,7 @@
 
 <template name="html5Video">
 	<div class="video-wrap {{#if active}} active {{/if}}" style="width: {{width}}px; height: {{height}}px;">
-		<video preload="meta" style="width: 100%; height: 100%;">
-			{{#each sources}}
-			<source src="{{src}}" type="{{type}}">
-			{{/each}}
-			<p>Your browser does not support the <code>video</code> element.</p>
-		</video>
+		<video src="{{source}}" preload="meta" style="width: 100%; height: 100%;"></video>
 		<div class="video-controls">
 			<div class="track" style="width: 100%;">
 				<div class="thumb" style="left: {{position}}px;"></div>	
@@ -35,7 +30,7 @@
 						<div class="qualities">
 							<ul>
 								{{#each qualities}}
-								<li>{{name}}</li>
+								<li class="{{#if selected}}selected{{/if}}">{{name}}</li>
 								{{/each}}
 							</ul>
 						</div>
