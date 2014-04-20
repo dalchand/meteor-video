@@ -176,7 +176,7 @@ Template.html5Video.events({
     var v = template.find("video");
     var thumb = $(template.find(".thumb"));
     if(v) {
-      var x = event.offsetX - thumb.outerWidth() / 2;
+      var x = (event.clientX - $(v).offset().left) - thumb.outerWidth() / 2;
       var currentTime = (x * v.duration)/($(v).width() - thumb.outerWidth());
       seekVideo(v, currentTime);
     }
