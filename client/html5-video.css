@@ -188,8 +188,8 @@
   position: absolute;
   z-index: 10;
   color: rgba(255, 255, 255, 1);
-  border: 1px solid rgba(194, 194, 194, 0.7);
-  box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(194, 194, 194, 0.8);
+  box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.9);
   font-size: 36px;
   margin: 0 auto;
   left: 50%;
@@ -199,9 +199,9 @@
   display: inline-block;
   padding: 10px 17px;
   border-radius: 4px;
-  background-color: rgba(92, 92, 92, 0.4);
+  background-color: rgba(92, 92, 92, 0.5);
   cursor: pointer;
-  opacity: 0.8;
+  opacity: 0.6;
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 300ms;
 }
