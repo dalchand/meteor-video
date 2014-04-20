@@ -6,17 +6,10 @@ var video = {
   height: 400,
   qualities: [ 
     {
-      name: "240p", 
+      name: "1080p", 
       sources: [
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_240.webm", type: "video/webm"},
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_240.mp4", type: "video/mp4"}
-      ]
-    },
-    {
-      name: "480p", 
-      sources: [
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_480.webm", type: "video/webm"},
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_480.mp4", type: "video/mp4"}
+        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_1080.webm", type: "video/webm"},
+        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_1080.mp4", type: "video/mp4"}
       ]
     },
     {
@@ -27,10 +20,17 @@ var video = {
       ]
     },
     {
-      name: "1080p", 
+      name: "480p", 
       sources: [
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_1080.webm", type: "video/webm"},
-        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_1080.mp4", type: "video/mp4"}
+        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_480.webm", type: "video/webm"},
+        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_480.mp4", type: "video/mp4"}
+      ]
+    },
+    {
+      name: "240p", 
+      sources: [
+        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_240.webm", type: "video/webm"},
+        {src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_240.mp4", type: "video/mp4"}
       ]
     }
   ],
