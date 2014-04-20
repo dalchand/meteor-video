@@ -1,6 +1,6 @@
 .video-controls {
   position: absolute;
-  background: rgba(8, 8, 12, 0.9);
+  background: rgba(13, 13, 14, 0.95);
   opacity: 0;
   width: 100%;
   bottom: 0;
@@ -53,13 +53,13 @@
 }
 
 .track {
-  height: 4px;
+  height: 5px;
   background: rgba(117, 117, 119, 0.6);
   cursor: pointer;
   position: relative;
   top: 0;
   -webkit-transition-property: height;
-  -webkit-transition-duration: 300ms;
+  -webkit-transition-duration: 400ms;
   z-index: 1;
 }
 
@@ -69,13 +69,13 @@
   width: 5px;
   background: rgba(87, 87, 87, 1);
   position: absolute;
-  top: -6px;
+  top: -5px;
   border-radius: 18px;
   border: 5px solid rgba(255, 255, 255, 0.8);
   -webkit-box-shadow: 0 0 10px 0 rgba(12, 12, 12, 0.8);
   z-index: 2;
   -webkit-transition-property: top;
-  -webkit-transition-duration: 300ms;
+  -webkit-transition-duration: 400ms;
 }
 
 .track:hover {
@@ -138,21 +138,18 @@
   position: absolute;
   bottom: 36px;
   width: 60px;
-  right: -36px;
   background: #000;
   border: 1px solid #202020;
   box-shadow: -3px -3px 10px 0 #1B1B1B;
   border-bottom: none;
-  border-right: none;
   padding: 5px;
-  clear: both;
   opacity: 0;
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 300ms;
 }
 
 .open .popover-settings {
-  opacity: 1;
+  opacity: 0.8;
 }
 
 .open.control {

@@ -5,20 +5,8 @@ var video = {
   height: 400,
   qualities: [ 
     {
-      name: "1080p", 
-      src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_1080.webm"
-    },
-    {
-      name: "720p", 
-      src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_720.webm"
-    },
-    {
-      name: "480p", 
-      src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_480.webm"
-    },
-    {
       name: "240p", 
-      src: "https://download.dev.lifetape.com/p_147/processed_videos/bb7b0404474f3cdebb0287ae664438c5_1397211551927_87_240.webm"
+      src: "https://download.dev.lifetape.com/p_145/processed_videos/e2e5b3e6a4eb89604c738173277add1b_1393345708986_48_240.webm"
     }
   ],
   defaultQuality: 0
