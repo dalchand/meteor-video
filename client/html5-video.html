@@ -10,7 +10,10 @@
 </body>
 
 <template name="html5Video">
-	<div class="video-wrap {{#if active}} active {{/if}}" style="width: {{width}}px; height: {{height}}px;">
+	<div class="video-wrap paused {{#if active}} active {{/if}}" style="width: {{width}}px; height: {{height}}px;">
+		<div class="main-play play-wrap">
+			<div class="fa fa-fw fa-play"></div>
+		</div>
 		<video src="{{source}}" preload="meta" style="width: 100%; height: 100%;"></video>
 		<div class="video-controls">
 			<div class="track" style="width: 100%;">
@@ -24,10 +27,10 @@
 				</div>
 			</div>
 			<div class="controls">
-				<div class="control pull-left"><i class="fa fa-play play"></i></div>
-				<div class="control pull-right"><i class="fa fa-expand fullScreen"></i></div>
+				<div class="control pull-left"><i class="fa fa-play fa-fw play"></i></div>
+				<div class="control pull-right"><i class="fa fa-fw fa-expand fullScreen"></i></div>
 				<div class="control settings pull-right">
-					<i class="fa fa-cog settingsBtn"></i>
+					<i class="fa fa-fw fa-cog settingsBtn"></i>
 					<div class="popover-settings">
 						<div class="qualities">
 							<ul>
@@ -38,7 +41,9 @@
 						</div>
 					</div>
 				</div>
+				{{#if duration}}
 				<div class="control time pull-right">{{currentTime}} / {{duration}}</div>
+				{{/if}}
 			</div>
 		</div>
 	</div>

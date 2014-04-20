@@ -78,7 +78,9 @@ Template.html5Video.currentTime = function() {
 }
 
 Template.html5Video.duration = function() {
-  return formatTime(Session.get("duration"));
+  if(Session.get("duration")) {
+    return formatTime(Session.get("duration"));
+  }
 }
 
 Template.html5Video.active = function() {
@@ -121,6 +123,11 @@ Template.html5Video.rendered = function() {
       Session.set("userActive", false);
     }, 3000);
   });
+
+  var settings = this.find(".settings");
+  $(document).on("click", function(event){
+    $(settings).removeClass("open");
+  })
 }
 
 Template.html5Video.destroyed = function() {
@@ -152,6 +159,7 @@ var _play = false;
 
 Template.html5Video.events({
   "click .settings li": function(event, template) {
+    event.stopPropagation();
     _currentSrc = this.src;
     var video = template.find("video");
     _currentTime = video.currentTime;
@@ -193,6 +201,16 @@ Template.html5Video.events({
       v.play();
     }
   },
+  "click video": function(event, template) {
+    var v = event.target;
+    if(v) {
+      if(v.paused) {
+        v.play();
+      } else {
+        v.pause();
+      }
+    }
+  },
   "click .fa-pause": function(event, template) {
     var v = template.find("video");
     if(v) {
@@ -200,46 +218,62 @@ Template.html5Video.events({
     }
   },
   "play video": function(event, template) {
-    var el = template.find(".fa-play");
+    var el = template.findAll(".fa-play");
+    var video = template.find(".video-wrap");
+    var mainPlay = template.find(".main-play");
     if(el) {
       $(el).removeClass("fa-play").addClass("fa-pause");
+      $(video).removeClass("paused");
+      Meteor.setTimeout(function(){
+        $(mainPlay).css("opacity", 0);
+      }, 50);
     }
   },
   "pause video": function(event, template) {
-    var el = template.find(".fa-pause");
+    var el = template.findAll(".fa-pause");
+    var video = template.find(".video-wrap");
+    var mainPlay = template.find(".main-play");
     if(el) {
       $(el).removeClass("fa-pause").addClass("fa-play");
+      $(video).addClass("paused");
+      Meteor.setTimeout(function(){
+        $(mainPlay).css("opacity", "");
+      }, 50)
     }
   },
-  "mouseenter .settingsBtn": function(event, template) {
+  "click .settingsBtn": function(event, template) {
+    event.stopPropagation();
     var el = template.find(".settings");
     if(el) {
-      $(el).addClass("open");
-    }
-  },
-  "mouseout .popover-settings": function(event, template) {
-    var el = template.find(".settings");
-    if(el) {
-      $(el).removeClass("open");
-    }
-  },
-  "mouseout .controls": function(event, template) {
-    var el = template.find(".settings");
-    if(el) {
-      $(el).removeClass("open");
+      var jQueryEl = $(el);
+      if(jQueryEl.hasClass("open")) {
+        jQueryEl.removeClass("open");    
+      } else {
+        jQueryEl.addClass("open");
+      }
     }
   },
   "click .fullScreen": function(event, template) {
     var el = $(template.find(".video-wrap"));
     if(el.hasClass("full-screen")) {
-      toggleFullScreen();
       $("html").removeClass("video-full-screen");
       el.removeClass("full-screen");
-    } else {
       toggleFullScreen();
+      $(document).off("webkitfullscreenchange mozfullscreenchange fullscreenchange");
+    } else {
       $("html").addClass("video-full-screen");
       el.addClass("full-screen");
+      toggleFullScreen();
+      $(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function(event){
+        if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {
+          $("html").removeClass("video-full-screen");
+          el.removeClass("full-screen");
+        }
+      })
     }
+  },
+  "fullscreenchange .video-wrap": function(event, template) {
+    console.log(event);
   },
   "loadedmetadata video": function(event) {
     var v = event.target;
