@@ -75,21 +75,22 @@
   width: 5px;
   background: rgba(87, 87, 87, 1);
   position: absolute;
-  top: -5px;
+  top: -3px;
   border-radius: 18px;
-  border: 5px solid rgba(255, 255, 255, 0.8);
+  border: 3px solid rgba(255, 255, 255, 0.8);
   -webkit-box-shadow: 0 0 10px 0 rgba(12, 12, 12, 0.8);
   z-index: 2;
-  -webkit-transition-property: top, left;
-  -webkit-transition-duration: 150ms;
+  -webkit-transition-property: top, left, border;
+  -webkit-transition-duration: 300ms;
 }
 
-.track:hover {
+.track.activate {
   height: 8px;
 }
 
-.track:hover .thumb {
+.track.activate .thumb {
   top: -4px;
+  border: 5px solid rgba(255, 255, 255, 0.8);
 }
 
 .seek-bar {

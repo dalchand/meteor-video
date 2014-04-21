@@ -93,12 +93,21 @@ Template.html5Video.active = function() {
 Template.html5Video.rendered = function() {
   var v = this.find("video");
   var thumb = this.find(".thumb");
+  var seek_bar = this.find(".seek-bar");
   var self = this;
+  var maxSeek = $(seek_bar).width() - $(thumb).outerWidth();
+  var minSeek = 0;
   $(document).on("mousemove.seek", function(event){
     if(Session.get("seeking")) {
       var clientX = event.clientX;
       var diff = clientX - Session.get("seek_x");
       var position = Session.get("position") + diff;
+      if(position > maxSeek) {
+        position = maxSeek
+      }
+      if(position < minSeek) {
+        position = minSeek;
+      }
       Session.set("seek_x", clientX);
       Session.set("position", position);
     }
@@ -142,7 +151,7 @@ Template.html5Video.rendered = function() {
   $(v).on("mousestop", function(){
     Meteor.setTimeout(function(){
       Session.set("userActive", false);
-    }, 6000);
+    }, 7000);
   })
 
   $(v).on("mouseout", function(){
@@ -378,6 +387,21 @@ Template.html5Video.events({
   "volumechange video": function(event) {
     var v = event.target;
     Session.set("volumeLevel", 100 * v.volume);
+  },
+  "mouseenter .track": function(event) {
+    var el = $(event.target);
+    console.log(el);
+    el.addClass("over").addClass("activate");
+  },
+  "mouseout .track": function(event, template) {
+    var el = $(template.find(".track"));
+    console.log(el);
+    el.removeClass("over");
+    Meteor.setTimeout(function(){
+      if(!el.hasClass("over")) {
+        el.removeClass("activate");
+      }
+    }, 5000);
   }
 })
 
