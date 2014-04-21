@@ -25,11 +25,15 @@
   font-size: 17px;
   cursor: pointer;
   opacity: 0.65;
-  padding: 8px;
+  padding: 6px;
   position: relative;
   z-index: 0;
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 300ms;
+}
+
+.control i {
+  margin: 3px;
 }
 
 .controls .control:hover {
@@ -71,16 +75,16 @@
 
 .thumb {
   cursor: pointer;
-  height: 5px;
-  width: 5px;
+  height: 12px;
+  width: 12px;
   background: rgba(87, 87, 87, 1);
   position: absolute;
-  top: -3px;
+  top: -4px;
   border-radius: 18px;
-  border: 3px solid rgba(255, 255, 255, 0.8);
+  border: 4px solid rgba(255, 255, 255, 0.8);
   -webkit-box-shadow: 0 0 10px 0 rgba(12, 12, 12, 0.8);
   z-index: 2;
-  -webkit-transition-property: top, left, border;
+  -webkit-transition-property: top, left, border, height, width;
   -webkit-transition-duration: 300ms;
 }
 
@@ -90,6 +94,8 @@
 
 .track.activate .thumb {
   top: -4px;
+  height: 15px;
+  width: 15px;
   border: 5px solid rgba(255, 255, 255, 0.8);
 }
 
@@ -99,7 +105,7 @@
 
 .volume-bar {
   width: 75px;
-  margin: 6px 0;
+  margin: 9px 0;
   height: 6px;
   background: rgba(117, 117, 119, 0.6);
   cursor: pointer;
@@ -122,7 +128,7 @@
   border-radius: 1px;
   border: 1px solid #D6D6D6;
   box-shadow: 0 0 3px 0 #000000;
-  top: -6px;
+  top: -5px;
   position: absolute;
   margin-left: -3px;
   -webkit-transition-property: left;
@@ -137,9 +143,9 @@
   z-index: 0;
 }
 
-.progress {
+.seek-progress {
   height: 100%;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.4);
   cursor: pointer;
   position: absolute;
   top: 0px;

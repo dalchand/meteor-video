@@ -1,6 +1,5 @@
 <head>
   <title>html5-video</title>
-  <link rel="stylesheet" type="text/css" href="font-awesome-4.0.3/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -12,7 +11,7 @@
 <template name="html5Video">
 	<div class="video-wrap paused {{#if active}} active {{/if}}" style="width: {{width}}px; height: {{height}}px;">
 		<div class="main-play play-wrap">
-			<div class="fa fa-fw fa-play"></div>
+			<div class="glyphicon glyphicon-play"></div>
 		</div>
 		<video src="{{source}}" preload="meta" style="width: 100%; height: 100%;"></video>
 		<div class="video-controls">
@@ -22,22 +21,22 @@
 				</div>
 				<div class="progress-wrap" style="width: 100%;">
 					{{#each progresses}}
-					<div class="progress" style="left: {{start}}px; width: {{width}}px;"></div>
+					<div class="seek-progress" style="left: {{start}}px; width: {{width}}px;"></div>
 					{{/each}}
 				</div>
 			</div>
 			<div class="controls">
-				<div class="control pull-left"><i class="fa fa-play fa-fw play"></i></div>
-				<div class="control pull-left"><i class="fa fa-volume-{{volumeIcon}} fa-fw volume"></i></div>
+				<div class="control pull-left"><i class="glyphicon glyphicon-play play"></i></div>
+				<div class="control pull-left"><i class="glyphicon glyphicon-volume-{{volumeIcon}} volume"></i></div>
 				<div class="control pull-left">
 					<div class="volume-bar">
 						<div class="volume-thumb" style="left: {{volumeLevel}}%;"></div>	
 						<div class="volume-progress" style="width: {{volumeLevel}}%;"></div>	
 					</div>
 				</div>
-				<div class="control pull-right"><i class="fa fa-fw fa-expand fullScreen"></i></div>
+				<div class="control pull-right"><i class="glyphicon glyphicon-resize-full fullScreen"></i></div>
 				<div class="control settings pull-right">
-					<i class="fa fa-fw fa-cog settingsBtn"></i>
+					<i class="glyphicon glyphicon-cog settingsBtn"></i>
 					<div class="popover-settings">
 						<div class="qualities">
 							<ul>

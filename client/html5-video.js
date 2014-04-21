@@ -269,7 +269,7 @@ Template.html5Video.events({
       }
     }
   },
-  "click .fa-play": function(event, template) {
+  "click .glyphicon-play": function(event, template) {
     var v = template.find("video");
     if(v) {
       v.play();
@@ -285,18 +285,18 @@ Template.html5Video.events({
       }
     }
   },
-  "click .fa-pause": function(event, template) {
+  "click .glyphicon-pause": function(event, template) {
     var v = template.find("video");
     if(v) {
       v.pause();
     }
   },
   "play video": function(event, template) {
-    var el = template.findAll(".fa-play");
+    var el = template.findAll(".glyphicon-play");
     var video = template.find(".video-wrap");
     var mainPlay = template.find(".main-play");
     if(el) {
-      $(el).removeClass("fa-play").addClass("fa-pause");
+      $(el).removeClass("glyphicon-play").addClass("glyphicon-pause");
       $(video).removeClass("paused");
       Meteor.setTimeout(function(){
         $(mainPlay).css("opacity", 0);
@@ -304,11 +304,11 @@ Template.html5Video.events({
     }
   },
   "pause video": function(event, template) {
-    var el = template.findAll(".fa-pause");
+    var el = template.findAll(".glyphicon-pause");
     var video = template.find(".video-wrap");
     var mainPlay = template.find(".main-play");
     if(el) {
-      $(el).removeClass("fa-pause").addClass("fa-play");
+      $(el).removeClass("glyphicon-pause").addClass("glyphicon-play");
       $(video).addClass("paused");
       Meteor.setTimeout(function(){
         $(mainPlay).css("opacity", "");
@@ -346,9 +346,6 @@ Template.html5Video.events({
       })
     }
   },
-  "fullscreenchange .video-wrap": function(event, template) {
-    console.log(event);
-  },
   "loadedmetadata video": function(event) {
     var v = event.target;
     if(_currentTime > 0) {
@@ -358,9 +355,6 @@ Template.html5Video.events({
       v.play();
     }
     Session.set("volumeLevel", 100 * v.volume);
-  },
-  "loadstart": function(event) {
-  
   },
   "progress video": function(event, template) {
     var v = event.target;
@@ -390,12 +384,10 @@ Template.html5Video.events({
   },
   "mouseenter .track": function(event) {
     var el = $(event.target);
-    console.log(el);
     el.addClass("over").addClass("activate");
   },
   "mouseout .track": function(event, template) {
     var el = $(template.find(".track"));
-    console.log(el);
     el.removeClass("over");
     Meteor.setTimeout(function(){
       if(!el.hasClass("over")) {
