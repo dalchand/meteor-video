@@ -28,6 +28,13 @@
 			</div>
 			<div class="controls">
 				<div class="control pull-left"><i class="fa fa-play fa-fw play"></i></div>
+				<div class="control pull-left"><i class="fa fa-volume-{{volumeIcon}} fa-fw volume"></i></div>
+				<div class="control pull-left">
+					<div class="volume-bar">
+						<div class="volume-thumb" style="left: {{volumeLevel}}%;"></div>	
+						<div class="volume-progress" style="width: {{volumeLevel}}%;"></div>	
+					</div>
+				</div>
 				<div class="control pull-right"><i class="fa fa-fw fa-expand fullScreen"></i></div>
 				<div class="control settings pull-right">
 					<i class="fa fa-fw fa-cog settingsBtn"></i>

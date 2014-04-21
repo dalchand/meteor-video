@@ -45,6 +45,21 @@ Template.html5Video.position = function() {
   return Session.get("position");
 }
 
+Template.html5Video.volumeLevel = function() {
+  return Session.get("volumeLevel");
+}
+
+Template.html5Video.volumeIcon = function() {
+  var volume = Session.get("volumeLevel");
+  if(volume == 0) {
+    return "off";
+  } else if(volume <= 50){
+    return "down";
+  } else {
+    return "up";
+  }
+}
+
 Template.html5Video.progresses = function() {
   return Session.get("progresses");
 }
@@ -79,7 +94,7 @@ Template.html5Video.rendered = function() {
   var v = this.find("video");
   var thumb = this.find(".thumb");
   var self = this;
-  $("body").on("mousemove.seek", function(event){
+  $(document).on("mousemove.seek", function(event){
     if(Session.get("seeking")) {
       var clientX = event.clientX;
       var diff = clientX - Session.get("seek_x");
@@ -90,7 +105,7 @@ Template.html5Video.rendered = function() {
     Session.set("userActive", true);
   });
 
-  $("body").on("mouseup.seek", function(evt){
+  $(document).on("mouseup.seek", function(evt){
     if(Session.get("seeking")) {
       $("body").css("cursor", "default");
       var x = $(thumb).offset().left - $(thumb).outerWidth() / 2;
@@ -98,6 +113,30 @@ Template.html5Video.rendered = function() {
       seekVideo(v, currentTime);
       Session.set("seeking", false);
     }
+    $(self.find(".thumb")).removeClass("stopTransition");
+  });
+
+  $(document).on("mousemove.volumeseek", function(event){
+    if(Session.get("volume_seeking")) {
+      var clientX = event.clientX;
+      var diff = clientX - Session.get("volume_seek_x");
+      var volume = Session.get("volumeLevel") + diff * 100 / 75;
+      if(volume < 0) volume = 0;
+      if(volume > 100) volume = 100;
+      Session.set("volume_seek_x", clientX);
+      Session.set("volumeLevel", volume);
+      v.volume = volume / 100;
+    }
+    Session.set("userActive", true);
+  });
+
+  $(document).on("mouseup.volumeseek", function(evt){
+    if(Session.get("volume_seeking")) {
+      $("body").css("cursor", "default");
+      Session.set("volume_seeking", false);
+    }
+    $(self.find(".volume-thumb")).removeClass("stopTransition");
+    $(self.find(".volume-progress")).removeClass("stopTransition");
   });
 
   $(v).on("mousestop", function(){
@@ -127,7 +166,7 @@ Template.html5Video.destroyed = function() {
 }
 
 Session.setDefault("currentTime", 0);
- 
+Session.setDefault("volumeLevel", 0);
 var seekVideo = function(video, position) {
   var playing = false;
   if(!video.paused) {
@@ -144,6 +183,7 @@ var seekVideo = function(video, position) {
 
 var _currentTime = 0;
 var _play = false;
+var _currentVolume = 0;
 
 Template.html5Video.events({
   "click .settings li": function(event, template) {
@@ -159,6 +199,7 @@ Template.html5Video.events({
   "mousedown .thumb": function(event, template) {
     event.stopPropagation();
     var v = template.find("video");
+    $(event.target).addClass("stopTransition");
     if(v) {
       Session.set("seeking", true);
       Session.set("seek_x", event.clientX);
@@ -166,6 +207,20 @@ Template.html5Video.events({
     }
   },
   "click .thumb": function(event) {
+    event.stopPropagation();
+  },
+  "mousedown .volume-thumb": function(event, template) {
+    event.stopPropagation();
+    $(event.target).addClass("stopTransition");
+    $(template.find(".volume-progress")).addClass("stopTransition");
+    var v = template.find("video");
+    if(v) {
+      Session.set("volume_seeking", true);
+      Session.set("volume_seek_x", event.clientX);
+      $("body").css("cursor", "pointer");
+    }
+  },
+  "click .volume-thumb": function(event, template) {
     event.stopPropagation();
   },
   "click .track": function(event, template) {
@@ -177,11 +232,33 @@ Template.html5Video.events({
       seekVideo(v, currentTime);
     }
   },
+  "click .volume-bar": function(event, template) {
+    var v = template.find("video");
+    var thumb = $(template.find(".volume-thumb"));
+    if(v) {
+      var x = (event.clientX - $(event.target).offset().left) - thumb.outerWidth() / 2;
+      var volume = x / 75;
+      if(volume < 0) volume = 0;
+      if(volume > 100) volume = 100;
+      v.volume = volume;
+    }
+  },
   "canplay video": function(event) {
   
   },
   "loadeddata video": function(event) {
   
+  },
+  "click .volume": function(event, template) {
+    var v = template.find("video");
+    if(v) {
+      if(v.volume > 0) {
+        _currentVolume = v.volume;
+        v.volume = 0;
+      } else {
+        v.volume = _currentVolume;
+      }
+    }
   },
   "click .fa-play": function(event, template) {
     var v = template.find("video");
@@ -271,6 +348,7 @@ Template.html5Video.events({
     if(_play) {
       v.play();
     }
+    Session.set("volumeLevel", 100 * v.volume);
   },
   "loadstart": function(event) {
   
@@ -297,8 +375,9 @@ Template.html5Video.events({
       Session.set("position", position);
     } 
   },
-  "volumechanged video": function(event) {
-  
+  "volumechange video": function(event) {
+    var v = event.target;
+    Session.set("volumeLevel", 100 * v.volume);
   }
 })
 
