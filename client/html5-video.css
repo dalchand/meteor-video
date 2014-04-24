@@ -75,16 +75,18 @@
 
 .thumb {
   cursor: pointer;
-  height: 12px;
-  width: 12px;
+  top: -4px;
+  height: 16px;
+  width: 16px;
+  margin-left: -8px;
   background: rgba(87, 87, 87, 1);
   position: absolute;
-  top: -4px;
   border-radius: 18px;
-  border: 4px solid rgba(255, 255, 255, 0.8);
+  border: 5px solid rgba(255, 255, 255, 0.8);
   -webkit-box-shadow: 0 0 10px 0 rgba(12, 12, 12, 0.8);
-  z-index: 2;
-  -webkit-transition-property: top, left, border, height, width;
+  z-index: 5;
+  opacity: 0;
+  -webkit-transition-property: opacity;
   -webkit-transition-duration: 300ms;
 }
 
@@ -93,14 +95,21 @@
 }
 
 .track.activate .thumb {
-  top: -4px;
-  height: 15px;
-  width: 15px;
-  border: 5px solid rgba(255, 255, 255, 0.8);
+  opacity: 1;
 }
 
 .seek-bar {
   height: 100%;
+}
+
+.play-progress {
+  z-index: 3;
+  position: absolute;
+}
+
+.current-progress {
+  height: 100%;
+  background-color: rgba(136, 25, 25, 1);
 }
 
 .volume-bar {
@@ -111,13 +120,14 @@
   cursor: pointer;
   position: relative;
   top: 0;
+  z-index: 0;
 }
 
 .volume-progress {
-  height: 100%;
-  background: rgba(189, 189, 189, 1);
   -webkit-transition-property: width;
   -webkit-transition-duration: 150ms;
+  z-index: 1;
+  position: absolute;
 }
 
 .volume-thumb {
@@ -131,6 +141,7 @@
   top: -5px;
   position: absolute;
   margin-left: -3px;
+  z-index: 5;
   -webkit-transition-property: left;
   -webkit-transition-duration: 150ms;
 }
@@ -241,7 +252,7 @@
   margin-top: -32px;
   margin-left: -32px;
   top: 50%;
-  display: inline-block;
+  display: none;
   padding: 10px 17px;
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.6);
@@ -249,6 +260,10 @@
   opacity: 0.6;
   -webkit-transition-property: opacity;
   -webkit-transition-duration: 300ms;
+}
+
+.paused .play-wrap{
+  display: inline-block;
 }
 
 .play-wrap:hover {

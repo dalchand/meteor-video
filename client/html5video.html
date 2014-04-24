@@ -1,15 +1,11 @@
-<head>
-  <title>html5-video</title>
-</head>
-
-<body>
-	{{#with video}}
-		{{> html5Video}}
+<template name="html5video">
+	{{#with reactiveVideo}}
+		{{> reactive_html5_video}}
 	{{/with}}
-</body>
+</template>
 
-<template name="html5Video">
-	<div class="video-wrap paused {{#if active}} active {{/if}}" style="width: {{width}}px; height: {{height}}px;">
+<template name="reactive_html5_video">
+	<div class="video-wrap {{#if paused}} paused {{/if}} {{#if active}} active {{/if}}" style="width: {{width}}px; height: {{height}}px;">
 		<div class="main-play play-wrap">
 			<div class="glyphicon glyphicon-play"></div>
 		</div>
@@ -17,21 +13,22 @@
 		<div class="video-controls">
 			<div class="track" style="width: 100%;">
 				<div class="seek-bar">
-					<div class="thumb" style="left: {{position}}px;"></div>	
-				</div>
-				<div class="progress-wrap" style="width: 100%;">
-					{{#each progresses}}
-					<div class="seek-progress" style="left: {{start}}px; width: {{width}}px;"></div>
-					{{/each}}
+					<div class="thumb" style="left: {{position}}%; margin-left: {{marginThumb}}px;"></div>
+					<div class="play-progress current-progress" style="width: {{position}}%;"></div>	
+					<div class="progress-wrap" style="width: 100%;">
+						{{#each progresses}}
+						<div class="seek-progress" style="left: {{start}}px; width: {{width}}px;"></div>
+						{{/each}}
+					</div>				
 				</div>
 			</div>
 			<div class="controls">
-				<div class="control pull-left"><i class="glyphicon glyphicon-play play"></i></div>
+				<div class="control pull-left"><i class="glyphicon {{#if playing}} glyphicon-pause {{else}} glyphicon-play {{/if}} play"></i></div>
 				<div class="control pull-left"><i class="glyphicon glyphicon-volume-{{volumeIcon}} volume"></i></div>
 				<div class="control pull-left">
 					<div class="volume-bar">
 						<div class="volume-thumb" style="left: {{volumeLevel}}%;"></div>	
-						<div class="volume-progress" style="width: {{volumeLevel}}%;"></div>	
+						<div class="volume-progress current-progress" style="width: {{volumeLevel}}%;"></div>	
 					</div>
 				</div>
 				<div class="control pull-right"><i class="glyphicon glyphicon-resize-full fullScreen"></i></div>
@@ -48,7 +45,7 @@
 					</div>
 				</div>
 				{{#if duration}}
-				<div class="control time pull-right">{{currentTime}} / {{duration}}</div>
+				<div class="control time pull-right">{{time}} / {{duration}}</div>
 				{{/if}}
 			</div>
 		</div>
