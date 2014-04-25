@@ -1,30 +1,8 @@
-// var video = {
-//   width: 600,
-//   height: 400,
-//   qualities: [ 
-//     {
-//       name: "240p", 
-//       src: "https://download.dev.lifetape.com/p_145/processed_videos/e2e5b3e6a4eb89604c738173277add1b_1393345708986_48_240.webm"
-//     }
-//   ],
-//   defaultQuality: 0
-// };
-
 
 Html5Video = function(options) {
 	
-	this._width = options.width;
-	this.width = function() {
-		return this._width;
-	}
-
-	this._height = options.height;		
-	this.height = function() {
-		return this._height;
-	}
-
 	this._qualities = options.qualities;
-	
+
 	this._qualityDeps = new Deps.Dependency;
 
 	this.quality = function() {
@@ -181,5 +159,6 @@ Html5Video = function(options) {
 		return this._active;
 	}
 
-	this.setQuality(this._qualities[options.defaultQuality]);
+	this.setQuality(this._qualities[options.defaultQuality]);	
+	
 }

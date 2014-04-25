@@ -20,19 +20,21 @@ Template.reactive_html5_video.rendered = function() {
     	if(Session.get("p_seeking")) {
       		var clientX = event.clientX;
       		var diff = clientX - Session.get("lastX");
-      		var time = diff * videoState.duration() / $(seek_bar).width();
+      		var time = diff * videoState.duration() / ($(seek_bar).width() - $(thumb).outerWidth());
       		var newTime = videoState.time() + time;
       		videoState.setTime(newTime);
-			Session.set("lastX", clientX);
+			    Session.set("lastX", clientX);
       	}
     });
 
   	$(document).on("mouseup.seek", function(evt){
     	if(Session.get("p_seeking")) {
+          var clientX = event.clientX;
       		$("body").css("cursor", "default");
-      		var x = $(thumb).offset().left - $(thumb).outerWidth() / 2;
-      		var currentTime = (x * v.duration)/($(v).width() - $(thumb).outerWidth());
-      		setTime(v, currentTime);
+      		var diff = clientX - Session.get("lastX");
+          var time = diff * videoState.duration() / ($(seek_bar).width() - $(thumb).outerWidth());
+          var newTime = videoState.time() + time;
+          setTime(v, newTime);
       		Session.set("p_seeking", false);
     	}
     	$(self.find(".thumb")).removeClass("stopTransition");
@@ -63,14 +65,18 @@ Template.reactive_html5_video.rendered = function() {
 
   	$(v).on("mousestop", function(){
     	Meteor.setTimeout(function(){
+        if(!Session.get("p_seeking")) {
       		videoState.setActive(false);
+        }
     	}, 7000);
   	})
 
   	$(v).on("mouseout", function(){
    	 	Meteor.setTimeout(function(){
-      		videoState.setActive(false);
-    	}, 3000);
+      		if(!Session.get("p_seeking")) {
+            videoState.setActive(false);
+          }
+    	}, 5000);
   	});
 
   	var settings = this.find(".settings");
@@ -94,10 +100,14 @@ Template.reactive_html5_video.helpers({
   		var quality = this.quality();
   		return quality.src;  
 	},
-	marginThumb: function() {
-		var p = this.progress() / 100;
-		return (-p) * 16;
-	},
+	// marginThumb: function() {
+	// 	var p = this.progress() / 100;
+	// 	return (-p) * 16;
+	// },
+  positionThumb: function() {
+      var progress = this.progress();
+      return progress + 8 - 16 * progress / 100;
+  },
 	position: function() {
   		var progress = this.progress();
   		return progress;
@@ -129,7 +139,10 @@ Template.reactive_html5_video.helpers({
 	},
 	progresses: function() {
 		return this.progresses();
-	}
+	},
+  stopTransition: function() {
+    return Session.get("p_seeking") || Session.get("v_seeking");
+  }
 });
 
 
@@ -325,11 +338,11 @@ Template.reactive_html5_video.events({
   	"progress video": function(event, template) {
     	var v = event.target;
     	var r = v.buffered;
-    	var thumb = template.find(".thumb");
+    	var seek_bar = template.find(".seek-bar");
     	var progresses = [];
     	for(var i = 0; i < r.length; i++) {
-      		var start = (r.start(i)/v.duration) * ($(v).width() - $(thumb).outerWidth());
-      		var end = (r.end(i)/v.duration) * ($(v).width() - $(thumb).outerWidth());
+      		var start = (r.start(i)/v.duration) * $(seek_bar).width();
+      		var end = (r.end(i)/v.duration) * $(seek_bar).width();
       		var width = end - start;
       		progresses.push({start: start, end: end, width: width});
     	}
@@ -346,15 +359,15 @@ Template.reactive_html5_video.events({
     	var v = event.target;
     	template.data.setVolume(v.volume);
     },
-  	"mouseenter .track": function(event) {
-    	var el = $(event.target);
-    	el.addClass("over").addClass("activate");
+  	"mousemove .video-controls": function(event, template) {
+    	var el = $(template.find(".video-controls"));
+      el.addClass("over").addClass("activate");
   	},
-  	"mouseout .track": function(event, template) {
-    	var el = $(template.find(".track"));
+  	"mouseout .video-controls": function(event, template) {
+    	var el = $(template.find(".video-controls"));
     	el.removeClass("over");
     	Meteor.setTimeout(function(){
-      		if(!el.hasClass("over")) {
+      		if(!el.hasClass("over") && !Session.get("p_seeking")) {
         		el.removeClass("activate");
       		}
     	}, 5000);
