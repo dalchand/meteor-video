@@ -6,7 +6,7 @@
 
 <template name="reactive_html5_video">
 	<div class="video-wrap {{#if stopTransition}} stopTransition {{/if}} {{#if paused}} paused {{/if}} {{#if active}} active {{/if}}" style="width: {{../width}}px; height: {{../height}}px;">
-		<div class="main-play play-wrap">
+		<div class="main-play play-wrap play">
 			<div class="glyphicon glyphicon-play"></div>
 		</div>
 		<video src="{{source}}" preload="meta" style="width: 100%; height: 100%;"></video>
@@ -27,17 +27,17 @@
 				</div>
 			</div>
 			<div class="controls">
-				<div class="control pull-left"><i class="glyphicon {{#if playing}} glyphicon-pause {{else}} glyphicon-play {{/if}} play"></i></div>
-				<div class="control pull-left"><i class="glyphicon glyphicon-volume-{{volumeIcon}} volume"></i></div>
-				<div class="control pull-left">
-					<div class="volume-bar">
+				<div class="control pull-left"><i class="control-fade glyphicon {{#if playing}} glyphicon-pause pause {{else}} glyphicon-play play {{/if}}"></i></div>
+				<div class="control pull-left"><i class="control-fade glyphicon glyphicon-volume-{{volumeIcon}} volume"></i></div>
+				<div class="control pull-left"> 
+					<div class="volume-bar control-fade">
 						<div class="volume-thumb" style="left: {{volumeLevel}}%;"></div>	
 						<div class="volume-progress current-progress" style="width: {{volumeLevel}}%;"></div>	
 					</div>
 				</div>
-				<div class="control pull-right"><i class="glyphicon glyphicon-resize-full fullScreen"></i></div>
+				<div class="control pull-right"><i class="control-fade glyphicon glyphicon-resize-full fullScreen"></i></div>
 				<div class="control settings pull-right">
-					<i class="glyphicon glyphicon-cog settingsBtn"></i>
+					<i class="control-fade glyphicon glyphicon-cog settingsBtn"></i>
 					<div class="popover-settings">
 						<div class="qualities">
 							<ul>

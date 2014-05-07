@@ -1,7 +1,33 @@
 
+var canPlayType = function(type) {
+  var canPlay = false;
+  var v = document.createElement('video');
+  if(v.canPlayType && v.canPlayType(type).replace(/no/, '')) {
+    canPlay = true;
+  }
+  return canPlay;
+}
+
 Html5Video = function(options) {
 	
-	this._qualities = options.qualities;
+	this._qualities = [];
+
+	for(var i = 0; i < options.qualities.length; i++) {
+		var q = options.qualities[i];
+		for(var j = 0; j < q.sources.length; j++) {
+			if(canPlayType(q.sources[j].type)) {
+				this._qualities.push({name: q.name, src: q.sources[j].src});
+				break;
+			}
+		}
+	}
+
+	if(!this._qualities) {
+		throw new Meteor.Error(1, "Browser does not support video type");
+		return;
+	}
+
+	options.qualities;
 
 	this._qualityDeps = new Deps.Dependency;
 

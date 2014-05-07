@@ -1,5 +1,4 @@
 Template.html5video.reactiveVideo = function() {
-  console.log(this);
   return new Html5Video(this);
 }
 
@@ -8,13 +7,36 @@ Session.setDefault("v_seeking", false);
 Session.setDefault("lastX", 0);
 
 Template.reactive_html5_video.rendered = function() {
-	var v = this.find("video");
+	 var v = this.find("video");
   	var thumb = this.find(".thumb");
+    var video_wrap = this.find(".video-wrap");
   	var seek_bar = this.find(".seek-bar");
   	var volume_bar = this.find(".volume-bar");
   	var self = this;
-  	
   	var videoState = this.data;
+
+    $(document).on("keydown", function(event){
+      var e = event || window.event;
+      var code = e.which || e.keyCode;
+      $(video_wrap).removeClass("stopTransition");
+      if($(v).hasClass("selected")) {
+        $(video_wrap).addClass("stopTransition");
+        var volume = v.volume;
+        var time = v.currentTime;
+        if(code == 37) {
+          time -= 5;
+        } else if(code == 38) {
+          volume += 0.1;
+        } else if(code == 39) {
+          time += 5;
+        } else if(code == 40) {
+          volume -= 0.1;
+        }
+        setVolume(v, volume);  
+        setTime(v, time);
+      }
+      e.preventDefault();
+    })
 
   	$(document).on("mousemove.seek", function(event){
     	if(Session.get("p_seeking")) {
@@ -27,7 +49,7 @@ Template.reactive_html5_video.rendered = function() {
       	}
     });
 
-  	$(document).on("mouseup.seek", function(evt){
+  	$(document).on("mouseup.seek", function(event){
     	if(Session.get("p_seeking")) {
           var clientX = event.clientX;
       		$("body").css("cursor", "default");
@@ -37,8 +59,7 @@ Template.reactive_html5_video.rendered = function() {
           setTime(v, newTime);
       		Session.set("p_seeking", false);
     	}
-    	$(self.find(".thumb")).removeClass("stopTransition");
-  	});
+    });
 
   	$(document).on("mousemove.volumeseek", function(event){
     	if(Session.get("v_seeking")) {
@@ -50,14 +71,12 @@ Template.reactive_html5_video.rendered = function() {
     	}
     });
 
-  	$(document).on("mouseup.volumeseek", function(evt){
+  	$(document).on("mouseup.volumeseek", function(event){
     	if(Session.get("v_seeking")) {
       		$("body").css("cursor", "default");
       		Session.set("v_seeking", false);
     	}
-    	$(self.find(".volume-thumb")).removeClass("stopTransition");
-    	$(self.find(".volume-progress")).removeClass("stopTransition");
-  	});
+    });
 
   	$(v).on("mousemove", function(){
   		videoState.setActive(true);
@@ -178,7 +197,7 @@ var setTime = function(video, time) {
   if(playing) {
     video.pause();
   }
-  if(time > video.duration) time = video.duration;
+  if(time > video.duration) time = video.duration - 0.1;
   if(time < 0) time = 0;
   video.currentTime = time; 
   if(playing) {
@@ -206,7 +225,6 @@ Template.reactive_html5_video.events({
   	"mousedown .thumb": function(event, template) {
     	event.stopPropagation();
     	var v = template.find("video");
-    	$(event.target).addClass("stopTransition");
     	if(v) {
       		Session.set("p_seeking", true);
       		Session.set("lastX", event.clientX);
@@ -218,8 +236,6 @@ Template.reactive_html5_video.events({
   	},
   	"mousedown .volume-thumb": function(event, template) {
     	event.stopPropagation();
-    	$(event.target).addClass("stopTransition");
-    	$(template.find(".volume-progress")).addClass("stopTransition");
     	var v = template.find("video");
     	if(v) {
       		Session.set("v_seeking", true);
@@ -265,7 +281,7 @@ Template.reactive_html5_video.events({
       		}
     	}
   	},
-  	"click .glyphicon-play": function(event, template) {
+  	"click .play": function(event, template) {
     	var v = template.find("video");
     	if(v) {
       		v.play();
@@ -281,7 +297,7 @@ Template.reactive_html5_video.events({
       		}
     	}
   	},
-  	"click .glyphicon-pause": function(event, template) {
+  	"click .pause": function(event, template) {
     	var v = template.find("video");
     	if(v) {
       		v.pause();
@@ -305,7 +321,12 @@ Template.reactive_html5_video.events({
       		}
     	}
   	},
-  	"click .fullScreen": function(event, template) {
+    "click .video-wrap": function(event, template) {
+      $("video.selected").removeClass("selected");
+      var video = template.find("video");
+      $(video).addClass("selected");
+    },
+    "click .fullScreen": function(event, template) {
     	var el = $(template.find(".video-wrap"));
     	if(el.hasClass("full-screen")) {
       		$("html").removeClass("video-full-screen");
